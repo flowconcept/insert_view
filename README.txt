@@ -4,6 +4,7 @@ Merlinofchaos' excellent Views module allows site admins to build dynamic conten
 
 [view:<name of view>] is replaced by the content listing, and
 [view:<name of view>=<number>] limits the listing to a particular <number> of entries.
+[view:<name of view>=<number>=<comma-delimited-list>] limits the listing to a particular <number> of entries, and passes a comma delimited list of arguments to the view.
 
 
 INSTALLATION
@@ -11,6 +12,6 @@ INSTALLATION
 Drop it into your modules folder and turn it on. Obviously, it requires the Views module to do its magic.
 
 
-TODO
-----
+TODONE
+------
 Add support for arguments? [view:viewname=5=arg1,arg2,arg3] is one possible syntax...

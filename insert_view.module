@@ -62,20 +62,25 @@ function insert_view_nodeapi(&$node, $op, $arg) {
 }
 
 function _insert_view_substitute_tags(&$node, $field) {
-    if (preg_match_all("/\[view:([^=\\]]+)=?([^\\]]*)?\]/i", $node->$field, $match)) {
+    if (preg_match_all("/\[view:([^=\]]+)=?([^=\]]+)?=?([^\]]*)?\]/i", $node->$field, $match)) {
        foreach ($match[2] as $key => $value) {
          $viewname = $match[1][$key];
          $limit = $match[2][$key];
+         $view_args = $match[3][$key];
 
          $view = views_get_view($viewname);
          $replace = "";
          
+         if ($view_args) {
+           $view_args = explode(',',$view_args);
+         } 
+         
          if ($view) {
            if ($limit != NULL && is_numeric($limit)) {
-             $replace = views_build_view('embed', views_get_view($viewname), NULL, FALSE, $limit);
+             $replace = views_build_view('embed', views_get_view($viewname), $view_args, FALSE, $limit);
            }
            else {
-             $replace = views_build_view('embed', views_get_view($viewname));
+             $replace = views_build_view('embed', views_get_view($viewname), $view_args, FALSE, NULL);
            }
            $mtch[] = $match[0][$key];
            $repl[] = $replace;
