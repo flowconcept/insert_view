@@ -71,7 +71,12 @@ function _insert_view_substitute_tags(&$node, $field) {
          $view = views_get_view($viewname);
          $replace = "";
          
-         $view_args = explode(',',$view_args);
+         if ($view_args != NULL) {
+           $view_args = explode(',', $view_args);
+         }
+         else {
+           $view_args = array();
+         }
          
          if ($view) {
            if ($limit != NULL && is_numeric($limit)) {
