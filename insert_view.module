@@ -79,11 +79,11 @@ function _insert_view_substitute_tags(&$node, $field) {
          }
          
          if ($view) {
-           if ($limit != NULL && is_numeric($limit)) {
-             $replace = views_build_view('embed', views_get_view($viewname), $view_args, FALSE, $limit);
+           if (is_numeric($limit)) {
+             $replace = views_build_view('embed', $view, $view_args, FALSE, $limit);
            }
            else {
-             $replace = views_build_view('embed', views_get_view($viewname), $view_args, FALSE, NULL);
+             $replace = views_build_view('embed', $view, $view_args, FALSE, NULL);
            }
            $mtch[] = $match[0][$key];
            $repl[] = $replace;
