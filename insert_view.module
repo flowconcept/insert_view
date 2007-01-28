@@ -4,8 +4,6 @@
 function insert_view_help($section = 'admin/help#insert_view') {
   $output = '';
   switch ($section) {
-    case 'admin/modules#description':
-      return t('Inserts content lists into nodes using [view:myview] tags');
     case 'filter#short-tip':
       return t('You may use <a href="%insert_view_help">[view:viewname] tags</a> to display listings of nodes.', array("%insert_view_help" => url("filter/tips/$format", NULL, 'filter-insert_view')));
     case 'filter#long-tip':
@@ -55,9 +53,13 @@ function insert_view_filter_tips($delta, $format, $long = false) {
 }
 
 function insert_view_nodeapi(&$node, $op, $arg) {
-  if($op == 'view' && function_exists('views_build_view')) {
-    $node->teaser = _insert_view_substitute_tags($node, 'teaser');
-    $node->body = _insert_view_substitute_tags($node, 'body');
+  if($op == 'alter' && function_exists('views_build_view')) {
+    if ($teaser) {
+      $node->teaser = _insert_view_substitute_tags($node, 'teaser');
+    }
+    else {
+      $node->body = _insert_view_substitute_tags($node, 'body');
+    }
   }
 }
 
