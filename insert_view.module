@@ -1,16 +1,6 @@
 <?php
 // $Id$
 
-function insert_view_help($section = 'admin/help#insert_view') {
-  $output = '';
-  switch ($section) {
-    case 'filter#short-tip':
-      return t('You may use <a href="%insert_view_help">[view:viewname] tags</a> to display listings of nodes.', array("%insert_view_help" => url("filter/tips/$format", NULL, 'filter-insert_view')));
-    case 'filter#long-tip':
-      return t('You may use <a href="%insert_view_help">[view:viewname] tags</a> to display listings of nodes.', array("%insert_view_help" => url("filter/tips/$format", NULL, 'filter-insert_view')));
-  }
-}
-
 function insert_view_filter($op, $delta = 0, $format = -1, $text = '') {
   // The "list" operation provides the module an opportunity to declare both how
   // many filters it defines and a human-readable name for each filter. Note that
@@ -48,7 +38,7 @@ function insert_view_filter_tips($delta, $format, $long = false) {
     ');
   }
   else {
-    return t('You may use <a href="%insert_view_help">[view:viewname] tags</a> to display listings of nodes.', array("%insert_view_help" => url("filter/tips/$format", NULL, 'filter-insert_view')));
+    return t('You may use <a href="@insert_view_help">[view:viewname] tags</a> to display listings of nodes.', array("@insert_view_help" => url("filter/tips/$format", NULL, 'filter-insert_view')));
   }
 }
 
