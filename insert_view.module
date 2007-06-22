@@ -43,13 +43,12 @@ function insert_view_filter_tips($delta, $format, $long = false) {
 }
 
 function insert_view_nodeapi(&$node, $op, $arg) {
-  if($op == 'alter' && function_exists('views_build_view')) {
-    if ($teaser) {
+  if ($op == 'alter' && function_exists('views_build_view')) {
       $node->teaser = _insert_view_substitute_tags($node, 'teaser');
-    }
-    else {
       $node->body = _insert_view_substitute_tags($node, 'body');
-    }
+  }
+  elseif ($op == 'print' && function_exists('views_build_view')) {
+    $node->content['body']['#value'] = _insert_view_substitute_tags($node, 'body');
   }
 }
 
