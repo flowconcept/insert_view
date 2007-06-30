@@ -70,6 +70,8 @@ function _insert_view_substitute_tags(&$node, $field) {
          }
          
          if ($view) {
+           // set $view->url to current page so views with exposed filters submit back to the same page
+           $view->url = $_GET['q'];
            if (is_numeric($limit)) {
              $replace = views_build_view('embed', $view, $view_args, FALSE, $limit);
            }
