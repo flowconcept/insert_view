@@ -53,36 +53,36 @@ function insert_view_nodeapi(&$node, $op, $arg) {
 }
 
 function _insert_view_substitute_tags(&$node, $field) {
-    if (preg_match_all("/\[view:([^=\]]+)=?([^=\]]+)?=?([^\]]*)?\]/i", $node->$field, $match)) {
-       foreach ($match[2] as $key => $value) {
-         $viewname = $match[1][$key];
-         $limit = $match[2][$key];
-         $view_args = $match[3][$key];
+  if (preg_match_all("/\[view:([^=\]]+)=?([^=\]]+)?=?([^\]]*)?\]/i", $node->$field, $match)) {
+    foreach ($match[2] as $key => $value) {
+      $viewname = $match[1][$key];
+      $limit = $match[2][$key];
+      $view_args = $match[3][$key];
 
-         $view = views_get_view($viewname);
-         $replace = "";
-         
-         if ($view_args != NULL) {
-           $view_args = explode(',', $view_args);
-         }
-         else {
-           $view_args = array();
-         }
-         
-         if ($view) {
-           // set $view->url to current page so views with exposed filters submit back to the same page
-           $view->url = $_GET['q'];
-           if (is_numeric($limit)) {
-             $replace = views_build_view('embed', $view, $view_args, FALSE, $limit);
-           }
-           else {
-             $replace = views_build_view('embed', $view, $view_args, FALSE, NULL);
-           }
-           $mtch[] = $match[0][$key];
-           $repl[] = $replace;
-         }
-       }
-       return str_replace($mtch, $repl, $node->$field);
+      $view = views_get_view($viewname);
+      $replace = "";
+
+      if ($view_args != NULL) {
+        $view_args = explode(',', $view_args);
+      }
+      else {
+        $view_args = array();
+      }
+
+      if ($view) {
+        // set $view->url to current page so views with exposed filters submit back to the same page
+        $view->url = $_GET['q'];
+        if (is_numeric($limit)) {
+          $replace = views_build_view('embed', $view, $view_args, FALSE, $limit);
+        }
+        else {
+          $replace = views_build_view('embed', $view, $view_args, FALSE, NULL);
+        }
+        $mtch[] = $match[0][$key];
+        $repl[] = $replace;
+      }
     }
-    return $node->$field;
+    return str_replace($mtch, $repl, $node->$field);
+  }
+  return $node->$field;
 }
