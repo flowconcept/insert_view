@@ -20,6 +20,8 @@ function insert_view_filter($op, $delta = 0, $format = -1, $text = '') {
        return $text;
     case 'process':
        return _insert_view_substitute_tags($text);
+    case 'no cache':
+       return TRUE;
   }
 }
 
