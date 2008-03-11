@@ -15,13 +15,13 @@ function insert_view_filter($op, $delta = 0, $format = -1, $text = '') {
   // discuss each filter in turn.
   switch ($op) {
     case 'description':
-       return t('Inserts content lists into nodes using [view:myview] tags.');
+      return t('Inserts content lists into nodes using [view:myview] tags.');
     case 'prepare':
-       return $text;
+      return $text;
     case 'process':
-       return _insert_view_substitute_tags($text);
+      return _insert_view_substitute_tags($text);
     case 'no cache':
-       return TRUE;
+      return TRUE;
   }
 }
 
