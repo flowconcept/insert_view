@@ -23,26 +23,21 @@ In short this tag says, "Insert the view named book_reviews, limit the number of
 
 INSTALLATION
 ------------
-Drop it into your modules folder and turn it on. Obviously, it requires the Views module to
-do its magic.
+Extract and save the Insert View folder in your site's modules folder and enable it at
+admin/build/modules. Obviously, it requires the Views module to do its magic.
 
-If you want to display the filter tips (i.e. instructions on how to add insert view
-tags) in the formatting options of your node add/edit pages, go to Administer > Input
-formats > configure for the input format to which you want to add the "filter".  This step
-isn't required to make the module work, please note.  The module works as soon as it is
-enabled, so keep that in mind for security purposes.
+Once Insert View is installed, visit the the input formats page at /admin/settings/filters
+and click the "configure" link for the input format(s) for which you wish to enable the
+Insert View Filter.  Then simply check the checkbox for the filter.
 
-Insert_view is not a strict filter module  It uses some filter hooks to provide formatting
-instructions via the filter system, but actually accomplishes its inserting of views through
-hook_nodeapi() so that it has the proper context within which to run.  Because there is no
-hook_nodeapi() equivalent for blocks (that this developer is aware of), we can't similarly
-parse blocks.  If you've enabled the filter tips (as detailed in the previous paragraph), you
-the insert_view filter tips will appear on your block edit page but they won't work.  This is
-an unfortunate result of using filter tips to display this info, as normally filter tips
-would work for blocks.  In this case, however, they don't, and I'm yet to identify an elegant
-solution to the issue.
+UPGRADING FROM A PREVIOUS VERSION?
+----------------------------------
+In previous versions of Insert View (including the 2008-Jan-11 development snapshot
+and earlier) it was was not required to enable the Insert View filter for input formats
+(by visiting the /admin/settings/filters pages) because Insert View was a pseudo filter
+and used hook_nodeapi() rather than the filter system.
 
-To Do
------
-- Add permissions handling.
-- Filter tips appearing on block edit pages despite hook_nodeapi() not running for blocks.
+Insert View now runs as a classic Drupal filter module, and that means it now works
+in blocks.  If you upgrade your site and find Insert View tags aren't working, please
+visit /admin/settings/filters and enable the Insert View Filter for each input format
+necessary.

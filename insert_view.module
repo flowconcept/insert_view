@@ -19,7 +19,7 @@ function insert_view_filter($op, $delta = 0, $format = -1, $text = '') {
     case 'prepare':
        return $text;
     case 'process':
-       return $text;
+       return _insert_view_substitute_tags($text);
   }
 }
 
@@ -42,18 +42,8 @@ function insert_view_filter_tips($delta, $format, $long = false) {
   }
 }
 
-function insert_view_nodeapi(&$node, $op, $arg) {
-  if ($op == 'alter' && function_exists('views_build_view')) {
-      $node->teaser = _insert_view_substitute_tags($node, 'teaser');
-      $node->body = _insert_view_substitute_tags($node, 'body');
-  }
-  elseif ($op == 'print' && function_exists('views_build_view')) {
-    $node->content['body']['#value'] = _insert_view_substitute_tags($node, 'body');
-  }
-}
-
-function _insert_view_substitute_tags(&$node, $field) {
-  if (preg_match_all("/\[view:([^=\]]+)=?([^=\]]+)?=?([^\]]*)?\]/i", $node->$field, $match)) {
+function _insert_view_substitute_tags($text) {
+  if (preg_match_all("/\[view:([^=\]]+)=?([^=\]]+)?=?([^\]]*)?\]/i", $text, $match)) {
     foreach ($match[2] as $key => $value) {
       $viewname = $match[1][$key];
       $limit = $match[2][$key];
@@ -82,7 +72,7 @@ function _insert_view_substitute_tags(&$node, $field) {
         $repl[] = $replace;
       }
     }
-    return str_replace($mtch, $repl, $node->$field);
+    return str_replace($mtch, $repl, $text);
   }
-  return $node->$field;
+  return $text;
 }
