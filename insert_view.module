@@ -28,15 +28,46 @@ function insert_view_filter($op, $delta = 0, $format = -1, $text = '') {
 function insert_view_filter_tips($delta, $format, $long = false) {
   if ($long) {
     return t('
-    <p>The Views module allows administrators to create dynamic lists of content for display in pages or blocks. It is also possible to insert those lists into existing node bodies, but such inclusion requires that PHP filtering be turned on. This module allows any user to insert view listings using tag syntax, without the need for PHP execution permissions.</p>
+    <p>The Views module allows administrators to create dynamic lists of content
+    for display in pages or blocks. It is possible to insert those lists into
+    existing node bodies and blocks, but such inclusion requires that PHP
+    filtering be turned on. The Insert View module allows any user to insert
+    view listings using tag syntax, without the need for PHP execution
+    permissions. The Insert View tag syntax for embedding a view is relatively
+    simple:</p>
     
-    <pre>[view:my view]</pre>
-
-    will be replaced by the full listing of content defined by that view.
-
-    <pre>[view:my view=10]</pre>
-
-    will limit the listing to 10 items.
+    <pre>[view:my_view]</pre>
+    
+    <p>is replaced by the content listing corresponding to the named view (in
+    this case, my_view).</p>
+    
+    <pre>[view:my_view=5]</pre>
+    
+    <p>limits the listing to 5 entries.</p>
+    
+    <pre>[view:my_view=10=1,2,3]</pre>
+    
+    <p>limits the listing to 10 entries, and passes a comma delimited list of
+    arguments (in this case 1, 2, and 3) to the view.</p>
+    
+    <p>Here\'s an example you could use with the default view named "tracker"
+    which takes a user ID as an argument:</p>
+    
+    <pre>[view:tracker=5=1]</pre>
+    
+    <p>In short this tag says, "Insert the view named tracker, limit the
+    number of results to 5, and supply the argument/user ID 1."</p>
+    
+    <p>Sometimes you want to pass an argument without placing a limit on the number
+    of results. You can do that by leaving the limits position empty, like so:</p>
+    
+    <pre>[view:my_view==1]</pre>
+    
+    <p>You can use a pager with your view by using the following syntax
+    (note: you must set a limit which will serve as the number of nodes per
+    page):</p>
+    
+    <pre>[view_pager:my_view=3]</pre>
     ');
   }
   else {
@@ -45,11 +76,12 @@ function insert_view_filter_tips($delta, $format, $long = false) {
 }
 
 function _insert_view_substitute_tags($text) {
-  if (preg_match_all("/\[view:([^=\]]+)=?([^=\]]+)?=?([^\]]*)?\]/i", $text, $match)) {
-    foreach ($match[2] as $key => $value) {
-      $viewname = $match[1][$key];
-      $limit = $match[2][$key];
-      $view_args = $match[3][$key];
+  if (preg_match_all("/\[view(_pager)?:([^=\]]+)=?([^=\]]+)?=?([^\]]*)?\]/i", $text, $match)) {
+    foreach ($match[3] as $key => $value) {
+      $match[1][$key] == '_pager' ? $pager = TRUE : $pager = FALSE;
+      $viewname = $match[2][$key];
+      $limit = $match[3][$key];
+      $view_args = $match[4][$key];
 
       $view = views_get_view($viewname);
       $replace = "";
@@ -65,7 +97,7 @@ function _insert_view_substitute_tags($text) {
         // set $view->url to current page so views with exposed filters submit back to the same page
         $view->url = $_GET['q'];
         if (is_numeric($limit)) {
-          $replace = views_build_view('embed', $view, $view_args, FALSE, $limit);
+          $replace = views_build_view('embed', $view, $view_args, $pager, $limit);
         }
         else {
           $replace = views_build_view('embed', $view, $view_args, FALSE, NULL);
