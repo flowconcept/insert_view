@@ -43,6 +43,11 @@ Once Insert View is installed, visit the the input formats page at /admin/settin
 and click the "configure" link for the input format(s) for which you wish to enable the
 Insert View Filter.  Then simply check the checkbox for the filter.
 
+IMPORTANT PERFORMANCE NOTE: To dispaly views correctly, Insert View turns off caching for
+the input formats for which it is enabled. That means every node using this input format
+will not be cacheable. This can impact site performance. In these cases, it is recommended
+to create a special input format for use when inserting views.
+
 UPGRADING FROM A PREVIOUS VERSION?
 ----------------------------------
 In previous versions of Insert View (including the 2008-Jan-11 development snapshot
