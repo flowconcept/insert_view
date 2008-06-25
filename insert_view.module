@@ -95,7 +95,7 @@ function _insert_view_substitute_tags($text) {
 
       if ($view) {
         // set $view->url to current page so views with exposed filters submit back to the same page
-        $view->url = $_GET['q'];
+        $view->url = drupal_get_path_alias($_GET['q']);
         if (is_numeric($limit)) {
           $replace = views_build_view('embed', $view, $view_args, $pager, $limit);
         }
