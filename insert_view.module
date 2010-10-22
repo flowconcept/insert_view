@@ -13,7 +13,7 @@ function insert_view_filter_info() {
   $filters['insert_view'] = array(
     'title' => t('Insert view filter'),
     'description' => t('Embed views into nodes using [view:name=display=args] tags.'),
-    'process callback' => 'insert_view_substitute_tags',
+    'process callback' => '_insert_view_substitute_tags',
     'tips callback' => 'insert_view_filter_tips',
     'cache' => FALSE,
   );
