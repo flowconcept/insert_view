@@ -1,4 +1,3 @@
-; $Id$
 name = Insert view
 description = Input filter which allows to embed views.
 dependencies[] = views
