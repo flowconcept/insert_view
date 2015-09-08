@@ -1,7 +1,0 @@
-name = Insert view
-description = Input filter which allows to embed views.
-dependencies[] = views
-package = Views
-core = 7.x
-files[] = insert_view.install
-files[] = insert_view.module
