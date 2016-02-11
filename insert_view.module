@@ -21,8 +21,9 @@ function insert_view_help($route_name, RouteMatchInterface $route_match) {
 /**
  * Helper function to replace the tag syntax with the actual view.
  */
-function _insert_view_substitute_tags($text, $format) {
+function _insert_view_substitute_tags($text) {
   if (preg_match_all("/\[view:([^=\]]+)=?([^=\]]+)?=?([^\]]*)?\]/i", $text, $match)) {
+    $search = $replace = array();
     foreach ($match[0] as $key => $value) {
       $view_name = $match[1][$key];
       $display_id = ($match[2][$key] && !is_numeric($match[2][$key])) ? $match[2][$key] : 'default';
