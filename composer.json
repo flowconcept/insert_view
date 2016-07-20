@@ -1,0 +1,9 @@
+{
+  "name": "flowconcept/insert_view",
+  "description": "This module is a filter that allows users to embed views in text fields. Forked from https://www.drupal.org/project/insert_view",
+  "version": "8.x-1.x",
+  "type": "drupal-module",
+  "license": "GPL-2.0+",
+  "minimum-stability": "dev",
+  "require": { }
+}
