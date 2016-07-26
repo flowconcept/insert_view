@@ -7,10 +7,9 @@
 
 namespace Drupal\insert_view\Plugin\Filter;
 
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\filter\FilterProcessResult;
 use Drupal\filter\Plugin\FilterBase;
-use Drupal\Core\Url;
+use Drupal\views\Views;
 
 /**
  * Provides a filter for insert view.
@@ -29,11 +28,42 @@ class InsertView extends FilterBase {
    * {@inheritdoc}
    */
   public function process($text, $langcode) {
+    $result = new FilterProcessResult($text);
     if (!empty($text)) {
-      $text = _insert_view_substitute_tags($text);
+      if (preg_match_all("/\[view:([^=\]]+)=?([^=\]]+)?=?([^\]]*)?\]/i", $text, $match)) {
+        $search = $replace = array();
+        foreach ($match[0] as $key => $value) {
+          $view_name = $match[1][$key];
+          $display_id = ($match[2][$key] && !is_numeric($match[2][$key])) ? $match[2][$key] : 'default';
+          $args = $match[3][$key];
+
+          if (!empty($view_name)) {
+
+            $view = Views::getView($view_name);
+            if (!empty($view) && $view->access($display_id)) {
+              $result->addCacheableDependency($view->storage);
+              $current_path = \Drupal::service('path.current')->getPath();
+              $url_args = explode('/', $current_path);
+              foreach ($url_args as $id => $arg) {
+                $args = str_replace("%$id", $arg, $args);
+              }
+              $args = preg_replace(',/?(%\d),', '', $args);
+              $args = $args ? explode('/', $args) : array();
+
+              $view_output = $view->preview($display_id, $args);
+              $result->addCacheTags($view->getCacheTags());
+              $search[] = $value;
+              $replace[] = !empty($view_output) ? render($view_output) : '';
+
+            }
+          }
+        }
+
+        $result->setProcessedText(str_replace($search, $replace, $text));
+      }
     }
 
-    return new FilterProcessResult($text);
+    return $result;
   }
 
   /**
